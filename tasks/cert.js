@@ -1,3 +1,13 @@
+/*
+ * grunt-cert
+ * https://github.com/dios-david/grunt-cert
+ *
+ * Copyright (c) 2017 David Dios
+ * Licensed under the Apache-2.0 license.
+ */
+
+'use strict';
+
 var shelljs = require('shelljs'),
     uuidv4 = require('uuid/v4');
 
@@ -22,18 +32,18 @@ module.exports = function (grunt) {
     }
 
     CertificateGenerator.prototype = {
-        setLocations: function(locations) {
+        setLocations: function (locations) {
             this.locations = Object.assign({}, this.locations, locations);
             return this;
         },
 
-        setCertificateData: function(certData) {
+        setCertificateData: function (certData) {
             this.certData = Object.assign({}, this.certData, certData);
             return this;
         },
 
-        generateCertificate: function() {
-            if(this.validateCertData()) {
+        generateCertificate: function () {
+            if (this.validateCertData()) {
                 var command = COMMAND_PATTERN,
                     vars = Object.assign({
                         locationKey: this.locations.key,
@@ -47,15 +57,15 @@ module.exports = function (grunt) {
                     command = command.replace(regex, vars[i]);
                 }
 
-                console.log('Generating certification with openssl...');
+                grunt.log.writeln('Generating certification with openssl...');
 
                 shelljs.exec(command);
             }
         },
 
-        validateCertData: function() {
-            if(this.certData.countryName.length > 2) {
-                console.error('Country name should be no more than 2 characters long!');
+        validateCertData: function () {
+            if (this.certData.countryName.length > 2) {
+                grunt.error.writeln('Country name should be no more than 2 characters long!');
                 return false;
             }
 
@@ -64,10 +74,10 @@ module.exports = function (grunt) {
     };
 
 
-    grunt.registerMultiTask('certification', function() {
+    grunt.registerMultiTask('certification', function () {
         new CertificateGenerator()
-                .setLocations(this.data.locations)
-                .setCertificateData(this.data.certData)
-                .generateCertificate();
+            .setLocations(this.data.locations)
+            .setCertificateData(this.data.certData)
+            .generateCertificate();
     });
 };

@@ -10,7 +10,7 @@ Generates private keys and certificates in a Grunt task.
 ##Example Grunt configuration
 ```
 grunt.initConfig({
-    certification: {
+    cert: {
         cert: {
             locations: {
                 key: './certs/key.key',
@@ -27,6 +27,8 @@ grunt.initConfig({
             }
         }
     }
+    
+    grunt.loadNpmTasks('grunt-cert');
 });
 ```
 

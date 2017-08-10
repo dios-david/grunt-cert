@@ -1,0 +1,32 @@
+{
+  "name": "grunt-cert",
+  "version": "1.0.0",
+  "description": "Generates private keys and certificates in a Grunt task",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dios-david/grunt-cert.git"
+  },
+  "keywords": [
+    "openssl",
+    "certificate",
+    "pem",
+    "ssl",
+    "tls",
+    "nodejs",
+    "grunt"
+  ],
+  "author": "David Dios",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/dios-david/grunt-cert/issues"
+  },
+  "homepage": "https://github.com/dios-david/grunt-cert#readme",
+  "dependencies": {
+    "shelljs": "^0.7.8",
+    "uuid": "^3.1.0"
+  }
+}

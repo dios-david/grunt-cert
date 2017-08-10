@@ -1,6 +1,6 @@
 {
   "name": "grunt-cert",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generates private keys and certificates in a Grunt task",
   "main": "index.js",
   "scripts": {

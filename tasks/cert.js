@@ -74,7 +74,7 @@ module.exports = function (grunt) {
     };
 
 
-    grunt.registerMultiTask('certification', function () {
+    grunt.registerMultiTask('cert', function () {
         new CertificateGenerator()
             .setLocations(this.data.locations)
             .setCertificateData(this.data.certData)

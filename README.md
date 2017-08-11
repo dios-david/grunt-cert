@@ -9,27 +9,43 @@ Generates private keys and certificates in a Grunt task.
 
 ##Example Grunt configuration
 ```
-grunt.initConfig({
-    cert: {
+module.exports = function(grunt) {
+    grunt.initConfig({
         cert: {
-            locations: {
-                key: './certs/key.key',
-                cert: './certs/cert.cert'
+            keys: {
+                mode: {
+                    type: 'private-public-keys',
+                    keySize: 4096
+                },
+                locations: {
+                    privateKey: './private-key.pem',
+                    publicKey: './public-key.pem'
+                }
             },
-            certData: {
-                countryName: 'HU',
-                state: 'Csongrad',
-                city: 'Szeged',
-                organizationName: 'FooBar Ltd',
-                organizationUnitName: 'Development',
-                commonName: 'FooBar CA',
-                emailAddress: 'foo@bar.fb'
+            cert: {
+                mode: {
+                    type: 'cert',
+                    keySize: 4096
+                },
+                locations: {
+                    key: './key.key',
+                    cert: './cert.cert'
+                },
+                certData: {
+                    countryName: 'HU',
+                    state: 'Csongrad',
+                    city: 'Szeged',
+                    organizationName: 'FooBar Ltd',
+                    organizationUnitName: 'Development',
+                    commonName: 'FooBar CA',
+                    emailAddress: 'foo@bar.fb'
+                }
             }
         }
-    }
-    
-    grunt.loadNpmTasks('grunt-cert');
-});
+    });
+
+    grunt.loadNpmTasks('.grunt-cert');
+};
 ```
 
 Contributors welcome!

@@ -18,13 +18,17 @@ module.exports = function (grunt) {
         },
         KEYS_COMMAND_PATTERN_1 = 'openssl genrsa -out {{ locationPrivateKey }} {{ keySize }}',
         KEYS_COMMAND_PATTERN_2 = 'openssl rsa -pubout -in {{ locationPrivateKey }} -out {{ locationPublicKey }}',
-        CERT_COMMAND_PATTERN = 'openssl req -x509 -newkey rsa:{{ keySize }} -keyout {{ locationKey }} -out {{ locationCert }} -subj \'/C={{ countryName }}/ST={{ state }}/L={{ city }}/O={{ organizationName }}/OU={{ organizationUnitName }}/CN={{ commonName }}/emailAddress={{ emailAddress }}\' -passout pass:{{ passPhrase }}';
+        CERT_COMMAND_PATTERN = 'openssl req -x509 -newkey rsa:{{ keySize }} -keyout {{ locationKey }} -out {{ locationCert }} -subj \'/C={{ countryName }}/ST={{ state }}/L={{ city }}/O={{ organizationName }}/OU={{ organizationUnitName }}/CN={{ commonName }}/emailAddress={{ emailAddress }}\'',
+        CERT_ENCRYPTION_PATTERN = '-passout pass:{{ passPhrase }}',
+        CERT_PLAINTEXT_PATTERN = '-nodes';
 
     function CertificateGenerator() {
         this.mode = {
             type: TYPES.CERT,
             keySize: 4096
         },
+
+        this.encryptKey = true,
 
         this.locations = {
             privateKey: './private-key.pem',
@@ -48,6 +52,14 @@ module.exports = function (grunt) {
         setMode: function(mode) {
             if(mode) {
                 this.mode = Object.assign({}, this.mode, mode);
+            }
+
+            return this;
+        },
+
+        setEncryptKey: function(encryptKey) {
+            if(typeof encryptKey !== 'undefined') {
+                this.encryptKey = encryptKey;
             }
 
             return this;
@@ -95,13 +107,19 @@ module.exports = function (grunt) {
 
         generateCertificate: function () {
             if (this.validateCertData()) {
+                var cmd_pattern = CERT_COMMAND_PATTERN;
+                if (this.encryptKey) {
+                    cmd_pattern = cmd_pattern + ' ' + CERT_ENCRYPTION_PATTERN;
+                } else {
+                    cmd_pattern = cmd_pattern + ' ' + CERT_PLAINTEXT_PATTERN;
+                }
                 var vars = Object.assign({
                         locationKey: this.locations.key,
                         locationCert: this.locations.cert,
                         keySize: this.mode.keySize,
                         passPhrase: uuidv4()
                     }, this.certData),
-                    command = this.parseCommand(CERT_COMMAND_PATTERN, vars);
+                    command = this.parseCommand(cmd_pattern, vars);
 
                 grunt.log.writeln('Generating certification with openssl...');
 
@@ -133,6 +151,7 @@ module.exports = function (grunt) {
     grunt.registerMultiTask('cert', function () {
         new CertificateGenerator()
             .setMode(this.data.mode)
+            .setEncryptKey(this.data.encryptKey)
             .setLocations(this.data.locations)
             .setCertificateData(this.data.certData)
             .generate();

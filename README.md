@@ -2,12 +2,12 @@ grunt-cert
 ==========
 Generates private keys and certificates in a Grunt task.
 
-##Requirements
+## Requirements
 - openssl installed
 - grunt installed
 
 
-##Example Grunt configuration
+## Example Grunt configuration
 ```
 module.exports = function(grunt) {
     grunt.initConfig({
@@ -23,6 +23,7 @@ module.exports = function(grunt) {
                 }
             },
             cert: {
+                encryptKey: true,
                 mode: {
                     type: 'cert',
                     keySize: 4096
